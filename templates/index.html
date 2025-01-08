@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeatSaberAvatarChatbot</title>
+    <link rel="icon" href="../static/icon.png">
+    <link rel="stylesheet" type="text/css" href="../static/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <div id="avatar-container">
+        <div id="render-target">Loading...</div>
+        <div class="chatbot">
+            <div class="container">
+                <h1>El Chatbot Elzaky</h1>
+                <div id="chat-container">
+                    <div class="message chatbot-message">
+                        Hi! I'm a chatbot. How can I assist you today?
+                    </div>
+                </div>
+                <form id="user-input-form">
+                    <input type="text" id="user-input" placeholder="Type your message..." autofocus autocomplete="off">
+                    <button type="submit" class="send-button">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/BeatSaberAvatar.js" async defer></script>
+    <script>
+        window.addEventListener('load', function () {
+            const renderTarget = document.getElementById('render-target');
+
+            if (typeof BeatSaberAvatar !== 'undefined') {
+                const renderer = BeatSaberAvatar.setup(renderTarget, null, {
+                    assetsBaseDir: "../static/assets/",
+                    enableControls: true,
+                    initialZoomLevel: 1.3
+                });
+            } else {
+                console.error('BeatSaberAvatar is not defined');
+            }
+        });
+    </script>
+
+    <script type="text/javascript">
+        // Text-to-Speech Function
+        function textToAudio(message) {
+            let speech = new SpeechSynthesisUtterance();
+
+            speech.lang = "en-US";
+            speech.text = message;
+            speech.volume = 1.0; // Volume (0 to 1)
+            speech.rate = 1.0;   // Speed (0.1 to 10)
+            speech.pitch = 1.0;  // Pitch (0 to 2)
+
+            speechSynthesis.speak(speech);
+        }
+
+        $(document).ready(function() {
+            // Handle form submission
+            $('#user-input-form').on('submit', function(event) {
+                event.preventDefault();
+
+                var user_input = $('#user-input').val().trim();
+                if (user_input !== '') {
+                    $('#user-input').val(''); // Clear input
+                    appendUserMessage(user_input); // Append user message to chat
+
+                    // Send input to Flask backend via AJAX
+                    $.ajax({
+                        type: 'POST',
+                        url: '/chat', // Flask route for processing chat
+                        data: { user_input: user_input },
+                        success: function(response) {
+                            if (response.response) {
+                                appendChatbotMessage(response.response);
+                            } else {
+                                appendChatbotMessage("I'm sorry, I didn't understand that.");
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('AJAX Error:', error);
+                            appendChatbotMessage("An error occurred. Please try again later.");
+                        }
+                    });
+                }
+            });
+
+            // Append user message
+            function appendUserMessage(message) {
+                var messageElement = $('<div class="message user-message"></div>').text(message);
+                $('#chat-container').append(messageElement);
+                scrollChatToBottom();
+            }
+
+            // Append chatbot message and trigger Text-to-Speech
+            function appendChatbotMessage(message) {
+                var messageElement = $('<div class="message chatbot-message"></div>').text(message);
+                $('#chat-container').append(messageElement);
+                scrollChatToBottom();
+
+                // Call text-to-speech to read chatbot message
+                textToAudio(message);
+            }
+
+            // Scroll chat to bottom
+            function scrollChatToBottom() {
+                var chatContainer = $('#chat-container');
+                chatContainer.scrollTop(chatContainer[0].scrollHeight);
+            }
+        });
+    </script>
+</body>
+</html>
