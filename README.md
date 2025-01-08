@@ -5,7 +5,6 @@
 - [Features](#features)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
-- [Folder Structure](#folder-structure)
 - [Contributors](#contributors)
 
 ## Overview
