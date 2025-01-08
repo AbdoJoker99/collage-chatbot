@@ -17,7 +17,8 @@ The 3D Collage Chatbot is an innovative project that integrates conversational A
 - **User-Friendly GUIs**: Intuitive interface for seamless interaction.
 - **Cross-Platform Compatibility**: eamlessly functions across web browsers, desktop applications, and mobile devices for consistent user experience.
   
-## Getting Started
+## 🖼️ Screenshots
+![chatbot](https://github.com/AbdoJoker99/college-chatbot/blob/main/Screenshot%202025-01-08%20235556.png)
 
 ### Prerequisites
 Ensure you have the following installed before running this project:
