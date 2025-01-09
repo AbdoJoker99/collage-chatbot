@@ -34,15 +34,15 @@ Ensure you have the following installed before running this project:
       ```
 2. activate your  enviroment
    ```bash
-         \.venv\Scripts\activatet
+   \.venv\Scripts\activatet
       ```
 3. Install required dependencies
    ```bash
-       pip install -r requirements.txt
+   pip install -r requirements.txt
       ```
 4. Run the application
    ```bash
-       python app.py
+   python app.py
       ```
 
 ## Contributors
